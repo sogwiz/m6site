@@ -1,0 +1,2467 @@
+/**
+ * 6 Minds Infrastructure Theme - Main Stylesheet
+ * Dark theme with cyan/blue gradients
+ */
+
+/* ============================================
+   CSS Variables & Base Styles
+   ============================================ */
+:root {
+    --color-bg-primary: #020617; /* slate-950 */
+    --color-bg-secondary: #0f172a; /* slate-900 */
+    --color-bg-tertiary: #1e293b; /* slate-800 */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #cbd5e1; /* slate-300 */
+    --color-text-tertiary: #94a3b8; /* slate-400 */
+    --color-cyan: #22d3ee; /* cyan-400 */
+    --color-cyan-dark: #06b6d4; /* cyan-500 */
+    --color-blue: #3b82f6; /* blue-500 */
+    --color-blue-dark: #2563eb; /* blue-600 */
+    --color-gradient-cyan-blue: linear-gradient(to right, #06b6d4, #3b82f6);
+    --color-gradient-cyan-blue-reverse: linear-gradient(to right, #3b82f6, #06b6d4);
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    --border-radius: 0.75rem;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   Container & Layout
+   ============================================ */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 0 2rem;
+    }
+}
+
+/* ============================================
+   Navigation
+   ============================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: var(--transition);
+    padding: 1.5rem 0;
+}
+
+.navbar.scrolled {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom-color: rgba(51, 65, 85, 0.5);
+    padding: 1rem 0;
+}
+
+.navbar-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+    .navbar-container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .navbar-container {
+        padding: 0 2rem;
+    }
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+
+.logo-img,
+.custom-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.navbar-brand-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.brand-accent {
+    color: var(--color-cyan);
+}
+
+.desktop-nav {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .desktop-nav {
+        display: flex;
+    }
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-menu a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+    position: relative;
+    padding-bottom: 0.25rem;
+}
+
+.nav-menu a:hover,
+.nav-menu .current-menu-item a {
+    color: var(--color-cyan);
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-cyan);
+    transition: var(--transition);
+}
+
+.nav-menu a:hover::after,
+.nav-menu .current-menu-item a::after {
+    width: 100%;
+}
+
+/* Sub-menu / Dropdown Navigation */
+.nav-menu li {
+    position: relative;
+}
+
+.nav-menu .menu-item-has-children > a::after {
+    display: none; /* Remove underline animation for parent items with children */
+}
+
+/* Hide sub-menu by default */
+.nav-menu .sub-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--color-bg-primary);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    z-index: 1000;
+    /* Add a small gap buffer to prevent accidental mouse-out */
+    margin-top: 0.25rem;
+}
+
+/* Create a hover bridge - invisible area that connects parent to submenu */
+.nav-menu .menu-item-has-children::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 0.25rem;
+    background: transparent;
+    z-index: 999;
+}
+
+/* Show sub-menu on parent hover */
+.nav-menu .menu-item-has-children:hover > .sub-menu {
+    display: block;
+}
+
+/* Sub-menu items */
+.nav-menu .sub-menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu .sub-menu a {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.nav-menu .sub-menu a::after {
+    display: none; /* Remove underline animation for sub-menu items */
+}
+
+.nav-menu .sub-menu a:hover {
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--color-cyan);
+    padding-left: 1.5rem;
+}
+
+.nav-menu .sub-menu .current-menu-item a {
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--color-cyan);
+}
+
+/* Parent menu item hover state when it has children */
+.nav-menu .menu-item-has-children:hover > a {
+    color: var(--color-cyan);
+}
+
+/* Nested sub-menus (if needed) */
+.nav-menu .sub-menu .sub-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0.25rem;
+}
+
+.btn-client-portal {
+    padding: 0.625rem 1.5rem;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    transition: var(--transition);
+}
+
+.btn-client-portal:hover {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: rgba(6, 182, 212, 0.6);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+/* Mobile Menu */
+.mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .mobile-menu-toggle {
+        display: none;
+    }
+}
+
+.mobile-menu-toggle span {
+    width: 24px;
+    height: 2px;
+    background: var(--color-text-secondary);
+    transition: var(--transition);
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-nav {
+    display: none;
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-bg-tertiary);
+    padding: 1rem;
+}
+
+.mobile-nav.active {
+    display: block;
+}
+
+.mobile-nav-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mobile-nav-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.mobile-nav-menu a:hover,
+.mobile-nav-menu .current-menu-item a {
+    color: var(--color-cyan);
+    background: var(--color-bg-secondary);
+}
+
+/* Mobile sub-menus */
+.mobile-nav-menu .sub-menu {
+    display: none;
+    list-style: none;
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(6, 182, 212, 0.3);
+}
+
+.mobile-nav-menu .menu-item-has-children.active > .sub-menu {
+    display: block;
+}
+
+.mobile-nav-menu .sub-menu a {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+}
+
+.mobile-nav-menu .sub-menu a:hover {
+    padding-left: 1.125rem;
+}
+
+.btn-client-portal-mobile {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--color-gradient-cyan-blue);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.2);
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding-top: 80px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* When hero is inside wrapper (from shortcode), adjust padding */
+.hero-section-wrapper .hero-section {
+    padding-top: 100px; /* Account for navbar height */
+    margin-top: 0;
+}
+
+/* Hero section wrapper for shortcodes - breaks out of containers */
+.hero-section-wrapper {
+    width: 100vw;
+    max-width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    overflow: hidden;
+    clear: both;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* Ensure hero wrapper breaks out even when inside containers */
+.container .hero-section-wrapper,
+.page-content .hero-section-wrapper,
+article .hero-section-wrapper {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    left: 0 !important;
+    right: 0 !important;
+}
+
+/* When hero section wrapper is first in main-content, remove top padding */
+.main-content > .hero-section-wrapper:first-child,
+.main-content > .page-content > .hero-section-wrapper:first-child {
+    margin-top: -80px; /* Compensate for main-content padding-top */
+}
+
+/* When hero section is used, reduce top padding from main-content */
+.main-content:has(.hero-section-wrapper) {
+    padding-top: 0;
+}
+
+/* Hide page header when hero section is present in content */
+.page-content:has(.hero-section-wrapper) .page-header {
+    display: none;
+}
+
+/* Alternative for older browsers - use class-based approach */
+.main-content.no-top-padding {
+    padding-top: 0;
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom right, #020617, #1e3a8a, #020617);
+}
+
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.2;
+    background-image: 
+        linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+.hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 8s ease-in-out infinite;
+}
+
+.orb-1 {
+    top: 5rem;
+    left: 5rem;
+    width: 24rem;
+    height: 24rem;
+    background: rgba(6, 182, 212, 0.2);
+}
+
+.orb-2 {
+    bottom: 5rem;
+    right: 5rem;
+    width: 24rem;
+    height: 24rem;
+    background: rgba(37, 99, 235, 0.2);
+    animation-delay: -4s;
+}
+
+@keyframes orbFloat {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.hero-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.hero-icon {
+    padding: 1rem;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(4px);
+    color: var(--color-cyan);
+    transition: var(--transition);
+}
+
+.hero-icon:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+    .hero-title {
+        font-size: 3.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-title {
+        font-size: 4.5rem;
+    }
+}
+
+.hero-title-gradient {
+    background: linear-gradient(to right, #22d3ee, #3b82f6, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+}
+
+.hero-title-white {
+    color: var(--color-text-primary);
+    display: block;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 3rem;
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 640px) {
+    .hero-description {
+        font-size: 1.5rem;
+    }
+}
+
+.hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .hero-buttons {
+        flex-direction: row;
+    }
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: var(--color-gradient-cyan-blue);
+    color: var(--color-text-primary);
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.5);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.7);
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: var(--color-cyan);
+    backdrop-filter: blur(4px);
+}
+
+.btn-secondary:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(6, 182, 212, 0.6);
+}
+
+/* ============================================
+   Services Section
+   ============================================ */
+.services-section {
+    position: relative;
+    padding: 6rem 0;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.5), var(--color-bg-primary));
+    overflow: hidden;
+}
+
+.services-top-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-cyan), transparent);
+}
+
+.services-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #22d3ee, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@media (min-width: 640px) {
+    .section-title {
+        font-size: 3rem;
+    }
+}
+
+.section-description {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    max-width: 48rem;
+    margin: 0 auto;
+}
+
+.services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.service-card {
+    padding: 2rem;
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 1rem;
+    backdrop-filter: blur(4px);
+    transition: var(--transition);
+}
+
+.service-card:hover {
+    border-color: rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+@media (min-width: 1024px) {
+    .service-card {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+.service-icon {
+    flex-shrink: 0;
+    padding: 1.5rem;
+    background: linear-gradient(to bottom right, rgba(6, 182, 212, 0.2), rgba(37, 99, 235, 0.2));
+    border-radius: 0.75rem;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: var(--color-cyan);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.service-card:hover .service-icon {
+    transform: scale(1.1);
+}
+
+.service-content {
+    flex-grow: 1;
+}
+
+.service-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+}
+
+.service-description {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.service-features {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .service-features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.service-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-tertiary);
+    transition: var(--transition);
+}
+
+.service-features li:hover {
+    color: var(--color-cyan);
+    transform: translateX(5px);
+}
+
+.feature-arrow {
+    color: var(--color-cyan-dark);
+    font-weight: 700;
+}
+
+/* ============================================
+   Main Content
+   ============================================ */
+.main-content {
+    min-height: calc(100vh - 200px);
+    padding-top: 80px;
+}
+
+
+.page-header {
+    padding: 4rem 0 2rem;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+}
+
+@media (min-width: 640px) {
+    .page-title {
+        font-size: 3rem;
+    }
+}
+
+.page-description {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    max-width: 48rem;
+    margin: 0 auto;
+}
+
+.page-content {
+    padding: 2rem 0;
+}
+
+/* ============================================
+   Posts & Blog
+   ============================================ */
+.posts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .posts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .posts-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.post-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    border-color: rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+    transform: translateY(-4px);
+}
+
+.post-thumbnail {
+    overflow: hidden;
+}
+
+.post-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.post-card:hover .post-image {
+    transform: scale(1.05);
+}
+
+.post-content {
+    padding: 1.5rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.post-title a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.post-title a:hover {
+    color: var(--color-cyan);
+}
+
+.post-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: 1rem;
+}
+
+.post-excerpt {
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+
+.post-read-more {
+    color: var(--color-cyan);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.post-read-more:hover {
+    color: var(--color-cyan-dark);
+}
+
+/* ============================================
+   WPJobManager Styles
+   ============================================ */
+.job-listings-wrapper {
+    padding: 2rem 0;
+}
+
+.job_listings {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.job_listing {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: var(--transition);
+}
+
+.job_listing:hover {
+    border-color: rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.job_listing-header {
+    margin-bottom: 1rem;
+}
+
+.job_listing-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.job_listing-title a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.job_listing-title a:hover {
+    color: var(--color-cyan);
+}
+
+.job_listing-location {
+    color: var(--color-text-tertiary);
+    font-size: 0.875rem;
+}
+
+.job_listing-content {
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+
+.job_listing-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.job_listing-type {
+    background: var(--color-gradient-cyan-blue);
+    color: var(--color-text-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.job_listing-link {
+    color: var(--color-cyan);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.job_listing-link:hover {
+    color: var(--color-cyan-dark);
+}
+
+/* ============================================
+   Single Job Listing - Enhanced Professional Design
+   ============================================ */
+.single-job-listing {
+    padding: 2rem 0;
+}
+
+/* Job Header Section */
+.job-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 12px;
+}
+
+@media (min-width: 768px) {
+    .job-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 2.5rem;
+    }
+}
+
+.job-header-content {
+    flex-grow: 1;
+}
+
+.job-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-primary);
+    line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+    .job-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Job Meta Information */
+.job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.job-location,
+.job-type,
+.job-deadline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+}
+
+.job-location svg,
+.job-deadline svg {
+    color: var(--color-cyan);
+    flex-shrink: 0;
+}
+
+.job-type {
+    background: var(--color-gradient-cyan-blue);
+    color: var(--color-text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.job-actions {
+    flex-shrink: 0;
+}
+
+/* Content Grid Layout */
+.job-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .job-content-wrapper {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+/* Main Content Area - Professional Card Design */
+.job-main-content {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 12px;
+    padding: 2.5rem;
+}
+
+.job-main-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    margin-top: 2.5rem;
+    color: var(--color-cyan);
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+}
+
+.job-main-content h2:first-child {
+    margin-top: 0;
+}
+
+.job-main-content h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    color: var(--color-text-primary);
+}
+
+/* Job Description Content */
+.job-description,
+.job-requirements,
+.job-benefits {
+    margin-bottom: 2rem;
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+/* Paragraphs */
+.job-main-content p {
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+}
+
+/* CRITICAL: Fix bullet points to stay within bounds */
+.job-main-content ul,
+.job-main-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem !important;
+    list-style-position: outside !important;
+    color: var(--color-text-secondary);
+}
+
+.job-main-content ul {
+    list-style-type: disc !important;
+}
+
+.job-main-content ol {
+    list-style-type: decimal !important;
+}
+
+.job-main-content li {
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+    line-height: 1.8;
+}
+
+.job-main-content li::marker {
+    color: var(--color-cyan);
+}
+
+/* Nested lists */
+.job-main-content ul ul,
+.job-main-content ol ol,
+.job-main-content ul ol,
+.job-main-content ol ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem !important;
+}
+
+/* Links - Make them HIGHLY visible */
+.job-main-content a {
+    color: var(--color-cyan) !important;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.job-main-content a:hover {
+    color: var(--color-cyan-dark) !important;
+    text-decoration: none;
+}
+
+/* Company Website Link */
+.job-main-content a[href*="http"]::after {
+    content: " ↗";
+    font-size: 0.85em;
+    vertical-align: super;
+}
+
+/* Strong/Bold text */
+.job-main-content strong,
+.job-main-content b {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+/* Sidebar - Job Details Card */
+.job-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.job-sidebar-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: var(--transition);
+}
+
+.job-sidebar-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+}
+
+.job-sidebar-card h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--color-cyan);
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+}
+
+/* Job Details List */
+.job-details-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.job-details-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 8px;
+    border-left: 3px solid var(--color-cyan);
+}
+
+.job-details-list strong {
+    color: var(--color-cyan);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.job-details-list span {
+    color: var(--color-text-primary);
+    font-size: 1.05rem;
+}
+
+/* Company Info Section */
+.job-main-content .company-info {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.job-main-content .company-info h3 {
+    margin-top: 0;
+    color: var(--color-cyan);
+}
+
+/* Login to bookmark/apply messaging */
+.job-main-content .job-manager-info,
+.job-main-content .job_application {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.job-main-content .job-manager-info a,
+.job-main-content .job_application a {
+    color: var(--color-cyan) !important;
+    font-weight: 600;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+.site-footer {
+    position: relative;
+    background: var(--color-bg-primary);
+    border-top: 1px solid var(--color-bg-tertiary);
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+}
+
+.footer-background {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(30, 58, 138, 0.2), transparent);
+    pointer-events: none;
+}
+
+.footer-container {
+    position: relative;
+    z-index: 10;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+    .footer-container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .footer-container {
+        padding: 0 2rem;
+    }
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo-img,
+.footer-logo .custom-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.footer-brand-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.footer-description {
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: 1rem;
+}
+
+.footer-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-links a {
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--color-cyan);
+}
+
+.footer-contact {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+    transition: var(--transition);
+}
+
+.footer-contact li:hover {
+    color: var(--color-cyan);
+}
+
+.footer-icon {
+    flex-shrink: 0;
+    color: var(--color-text-tertiary);
+}
+
+.footer-bottom {
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-bg-tertiary);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .footer-bottom {
+        flex-direction: row;
+    }
+}
+
+.footer-copyright {
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+}
+
+.footer-legal {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+}
+
+.footer-legal a {
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-legal a:hover {
+    color: var(--color-cyan);
+}
+
+/* ============================================
+   Pagination
+   ============================================ */
+.pagination {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination .nav-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pagination a,
+.pagination span {
+    padding: 0.5rem 1rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: var(--transition);
+}
+
+.pagination a:hover,
+.pagination .current {
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--color-cyan);
+}
+
+/* ============================================
+   Job Search Form
+   ============================================ */
+.job-search-form {
+    max-width: 600px;
+    margin: 2rem auto;
+    width: 100%;
+}
+
+.job-search-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    backdrop-filter: blur(4px);
+    transition: var(--transition);
+}
+
+.job-search-wrapper:focus-within {
+    border-color: rgba(6, 182, 212, 0.6);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+.job-search-input {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    outline: none;
+    font-family: var(--font-family);
+}
+
+.job-search-input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+.job-search-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.job-search-button svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 640px) {
+    .job-search-wrapper {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .job-search-button {
+        justify-content: center;
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .job-search-button span {
+        display: inline;
+    }
+}
+
+/* ============================================
+   WP Job Manager Widget Styling
+   ============================================ */
+/* Make checkbox labels visible (black text) */
+.job_types label,
+.job_types .job-type,
+.job-manager-filter label,
+div.job_types input[type="checkbox"] + label,
+.job-filters .showing_jobs,
+#search_keywords ~ label,
+#search_location ~ label {
+    color: #000000 !important;
+    font-size: 0.8rem !important;
+    font-weight: 350 !important;
+}
+
+/* Specific targeting for Remote positions checkbox label */
+label[for="remote_position"],
+.remote_position label,
+input[name="remote_position"] + label {
+    color: #000000 !important;
+    font-size: 0.8rem !important;
+}
+
+/* Job type checkboxes - make them more visible */
+.job_types input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 0.5rem !important;
+    cursor: pointer !important;
+}
+
+/* Checkbox container spacing */
+.job_types label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-right: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    cursor: pointer !important;
+}
+
+/* WP Job Manager Search Widget - Input Fields */
+.job-manager-form input[type="text"]#search_keywords,
+.job-manager-form input[type="text"]#search_location,
+input#search_keywords,
+input#search_location {
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    border: 2px solid rgba(100, 116, 139, 0.3) !important;
+    border-radius: 8px !important;
+    color: #1e293b !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    font-family: var(--font-family) !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Input field focus state */
+.job-manager-form input[type="text"]#search_keywords:focus,
+.job-manager-form input[type="text"]#search_location:focus,
+input#search_keywords:focus,
+input#search_location:focus {
+    outline: none !important;
+    border-color: var(--color-cyan) !important;
+    background: rgba(255, 255, 255, 1) !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15), 0 2px 8px rgba(6, 182, 212, 0.1) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Input field hover state */
+.job-manager-form input[type="text"]#search_keywords:hover,
+.job-manager-form input[type="text"]#search_location:hover,
+input#search_keywords:hover,
+input#search_location:hover {
+    border-color: rgba(6, 182, 212, 0.4) !important;
+    background: rgba(255, 255, 255, 1) !important;
+}
+
+/* Placeholder styling */
+.job-manager-form input[type="text"]#search_keywords::placeholder,
+.job-manager-form input[type="text"]#search_location::placeholder,
+input#search_keywords::placeholder,
+input#search_location::placeholder {
+    color: rgba(100, 116, 139, 0.6) !important;
+    font-size: 1rem !important;
+}
+
+/* Search Jobs Submit Button */
+.job-manager-form input[type="submit"],
+.job-manager-form button[type="submit"],
+input.search_jobs,
+button.search_jobs,
+.job_filters input[type="submit"],
+.search_jobs input[type="submit"],
+div.job_filters input[type="submit"],
+form.job_filters input[type="submit"] {
+    padding: 1rem 2rem !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-transform: none !important;
+    letter-spacing: 0.025em !important;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25) !important;
+    width: 100% !important;
+    display: inline-block !important;
+    text-align: center !important;
+    min-height: 50px !important;
+}
+
+/* Submit button hover state */
+.job-manager-form input[type="submit"]:hover,
+.job-manager-form button[type="submit"]:hover,
+input.search_jobs:hover,
+button.search_jobs:hover,
+.job_filters input[type="submit"]:hover,
+.search_jobs input[type="submit"]:hover,
+div.job_filters input[type="submit"]:hover,
+form.job_filters input[type="submit"]:hover {
+    background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%) !important;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Submit button active/pressed state */
+.job-manager-form input[type="submit"]:active,
+.job-manager-form button[type="submit"]:active,
+input.search_jobs:active,
+button.search_jobs:active,
+.job_filters input[type="submit"]:active,
+.search_jobs input[type="submit"]:active,
+div.job_filters input[type="submit"]:active,
+form.job_filters input[type="submit"]:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3) !important;
+}
+
+/* Submit button focus state */
+.job-manager-form input[type="submit"]:focus,
+.job-manager-form button[type="submit"]:focus,
+input.search_jobs:focus,
+button.search_jobs:focus,
+.job_filters input[type="submit"]:focus,
+.search_jobs input[type="submit"]:focus,
+div.job_filters input[type="submit"]:focus,
+form.job_filters input[type="submit"]:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2), 0 6px 20px rgba(6, 182, 212, 0.4) !important;
+}
+
+/* Remote positions checkbox */
+input[type="checkbox"]#remote_position,
+input[name="remote_position"] {
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 0.5rem !important;
+    cursor: pointer !important;
+    accent-color: var(--color-cyan) !important;
+}
+
+/* Catch-all for any submit buttons in job listings pages - MOST SPECIFIC */
+article.jobs-search-page input[type="submit"],
+.jobs-search-page input[type="submit"],
+.page-template-page-jobs-search input[type="submit"],
+body.page input[type="submit"][value*="Search"],
+.job_listings input[type="submit"],
+div[class*="job"] input[type="submit"][value="Search Jobs"] {
+    padding: 1rem 2rem !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25) !important;
+    min-height: 50px !important;
+}
+
+article.jobs-search-page input[type="submit"]:hover,
+.jobs-search-page input[type="submit"]:hover,
+.page-template-page-jobs-search input[type="submit"]:hover,
+body.page input[type="submit"][value*="Search"]:hover,
+.job_listings input[type="submit"]:hover,
+div[class*="job"] input[type="submit"][value="Search Jobs"]:hover {
+    background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%) !important;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ============================================
+   Search Form
+   ============================================ */
+.search-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.search-field {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: var(--border-radius);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.search-field:focus {
+    outline: none;
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.search-submit {
+    padding: 0.75rem 1rem;
+    background: var(--color-gradient-cyan-blue);
+    border: none;
+    border-radius: var(--border-radius);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-submit:hover {
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.5);
+    transform: scale(1.05);
+}
+
+.screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ============================================
+   404 Error Page
+   ============================================ */
+.error-404 {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.error-title {
+    font-size: 8rem;
+    font-weight: 700;
+    background: var(--color-gradient-cyan-blue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.error-heading {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+}
+
+.error-description {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.error-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+    .error-actions {
+        flex-direction: row;
+    }
+}
+
+.error-search {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.error-search h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.text-gradient {
+    background: linear-gradient(to right, #22d3ee, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.no-posts,
+.no-jobs {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.no-posts h2,
+.no-jobs h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+}
+
+.no-posts p,
+.no-jobs p {
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* ============================================
+   Resume Submission Form Styling (WP Job Manager Resume Manager)
+   ============================================ */
+
+/* Resume form container */
+form#submit-resume-form.job-manager-form {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Form fieldsets - Remove boxes, use clean lines */
+form#submit-resume-form fieldset {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.2) !important;
+    border-radius: 0 !important;
+    padding: 1rem 0 !important;
+    margin-bottom: 0 !important;
+}
+
+form#submit-resume-form fieldset:last-of-type {
+    border-bottom: none !important;
+}
+
+form#submit-resume-form legend {
+    display: none !important;
+}
+
+/* Form labels */
+form#submit-resume-form fieldset label {
+    color: var(--color-text-primary) !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.5rem !important;
+    display: block !important;
+    font-size: 0.95rem !important;
+}
+
+form#submit-resume-form fieldset label small {
+    color: var(--color-text-secondary) !important;
+    font-weight: 400 !important;
+    font-size: 0.85rem !important;
+}
+
+/* Form inputs */
+form#submit-resume-form .field input[type="text"],
+form#submit-resume-form .field input[type="email"],
+form#submit-resume-form .field input[type="url"],
+form#submit-resume-form .field input[type="tel"],
+form#submit-resume-form .field input[type="number"],
+form#submit-resume-form .field input[type="date"],
+form#submit-resume-form .field textarea,
+form#submit-resume-form .field select {
+    width: 100% !important;
+    padding: 0.625rem 0.875rem !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(100, 116, 139, 0.3) !important;
+    border-radius: 6px !important;
+    color: var(--color-text-primary) !important;
+    font-size: 0.95rem !important;
+    transition: var(--transition) !important;
+}
+
+form#submit-resume-form .field input[type="text"]:focus,
+form#submit-resume-form .field input[type="email"]:focus,
+form#submit-resume-form .field input[type="url"]:focus,
+form#submit-resume-form .field input[type="tel"]:focus,
+form#submit-resume-form .field input[type="number"]:focus,
+form#submit-resume-form .field input[type="date"]:focus,
+form#submit-resume-form .field textarea:focus,
+form#submit-resume-form .field select:focus {
+    border-color: var(--color-cyan) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1) !important;
+}
+
+form#submit-resume-form .field input::placeholder,
+form#submit-resume-form .field textarea::placeholder {
+    color: var(--color-text-secondary) !important;
+    opacity: 0.6 !important;
+}
+
+/* Textarea */
+form#submit-resume-form .field textarea {
+    min-height: 100px !important;
+    resize: vertical !important;
+}
+
+/* File upload */
+form#submit-resume-form .field input[type="file"] {
+    padding: 0.625rem !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px dashed rgba(100, 116, 139, 0.3) !important;
+    border-radius: 6px !important;
+    color: var(--color-text-primary) !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+    width: 100% !important;
+    font-size: 0.9rem !important;
+}
+
+form#submit-resume-form .field input[type="file"]:hover {
+    border-color: var(--color-cyan) !important;
+}
+
+/* Form fields wrapper */
+form#submit-resume-form .field {
+    margin-bottom: 0 !important;
+}
+
+/* Submit button */
+form#submit-resume-form input.resume-submit-button,
+form#submit-resume-form .resume-submit-button {
+    background: linear-gradient(to right, var(--color-cyan), var(--color-blue)) !important;
+    color: white !important;
+    padding: 0.75rem 2rem !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+    width: auto !important;
+    min-width: 180px !important;
+    margin-top: 1rem !important;
+}
+
+form#submit-resume-form input.resume-submit-button:hover,
+form#submit-resume-form .resume-submit-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3) !important;
+}
+
+form#submit-resume-form input.resume-submit-button:disabled,
+form#submit-resume-form .resume-submit-button:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* Repeated fields (like links) */
+form#submit-resume-form .job-manager-data-row {
+    display: flex !important;
+    gap: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+    align-items: flex-end !important;
+}
+
+form#submit-resume-form .job-manager-data-row .field {
+    flex: 1 !important;
+}
+
+/* Add field button */
+form#submit-resume-form .add-field,
+form#submit-resume-form .add_resume_links {
+    background: transparent !important;
+    border: 1px solid var(--color-cyan) !important;
+    color: var(--color-cyan) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px !important;
+    font-size: 0.875rem !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+    margin-top: 0.5rem !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+form#submit-resume-form .add-field:hover,
+form#submit-resume-form .add_resume_links:hover {
+    background: rgba(6, 182, 212, 0.1) !important;
+}
+
+/* Remove field button */
+form#submit-resume-form .remove-row {
+    color: #ef4444 !important;
+    cursor: pointer !important;
+    padding: 0.375rem !important;
+    margin-left: 0.5rem !important;
+}
+
+/* Help text / Description */
+form#submit-resume-form .field small.description {
+    color: var(--color-text-secondary) !important;
+    font-size: 0.85rem !important;
+    display: block !important;
+    margin-top: 0.375rem !important;
+    font-style: italic !important;
+}
+
+/* Account signin section */
+form#submit-resume-form .job-manager-form-login {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.2) !important;
+    border-radius: 0 !important;
+    padding: 1rem 0 !important;
+    margin-bottom: 0 !important;
+}
+
+form#submit-resume-form .job-manager-form-login p {
+    color: var(--color-text-secondary) !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* ============================================
+   Resume Preview / Confirmation Page
+   ============================================ */
+
+/* Main preview container */
+.job-manager-form.resume-manager-form#resume_preview,
+form#resume_preview {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(100, 116, 139, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    margin: 2rem 0 !important;
+    max-width: 1200px !important;
+}
+
+/* Preview page header */
+#resume_preview h2,
+form#resume_preview h2 {
+    color: var(--color-cyan) !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 2px solid rgba(6, 182, 212, 0.3) !important;
+}
+
+/* Section containers in preview */
+#resume_preview > div,
+form#resume_preview > div {
+    margin-bottom: 2rem !important;
+    padding: 1.5rem !important;
+    background: rgba(30, 41, 59, 0.4) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(100, 116, 139, 0.2) !important;
+}
+
+#resume_preview > div:last-of-type,
+form#resume_preview > div:last-of-type {
+    margin-bottom: 1rem !important;
+}
+
+/* Data lists in preview */
+#resume_preview dl,
+form#resume_preview dl {
+    display: grid !important;
+    grid-template-columns: 200px 1fr !important;
+    gap: 1rem !important;
+    padding: 0.75rem 0 !important;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.15) !important;
+    margin-bottom: 0 !important;
+    align-items: start !important;
+}
+
+#resume_preview dl:last-child,
+form#resume_preview dl:last-child {
+    border-bottom: none !important;
+}
+
+/* Labels (dt) in preview */
+#resume_preview dt,
+form#resume_preview dt {
+    color: var(--color-cyan) !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding-top: 0.25rem !important;
+}
+
+/* Values (dd) in preview */
+#resume_preview dd,
+form#resume_preview dd {
+    color: var(--color-text-primary) !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    word-wrap: break-word !important;
+}
+
+/* Links in preview */
+#resume_preview dd a,
+form#resume_preview dd a {
+    color: var(--color-cyan) !important;
+    text-decoration: none !important;
+    transition: var(--transition) !important;
+}
+
+#resume_preview dd a:hover,
+form#resume_preview dd a:hover {
+    color: var(--color-cyan-dark) !important;
+    text-decoration: underline !important;
+}
+
+/* Section headings within preview */
+#resume_preview h3,
+form#resume_preview h3 {
+    color: var(--color-text-primary) !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.2) !important;
+}
+
+/* Lists in preview (skills, etc.) */
+#resume_preview ul,
+form#resume_preview ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0.5rem 0 !important;
+}
+
+#resume_preview li,
+form#resume_preview li {
+    color: var(--color-text-primary) !important;
+    padding: 0.5rem 0 !important;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.1) !important;
+}
+
+#resume_preview li:last-child,
+form#resume_preview li:last-child {
+    border-bottom: none !important;
+}
+
+/* Preview buttons section */
+#resume_preview .job-manager-form-actions,
+form#resume_preview .job-manager-form-actions,
+#resume_preview p.submit,
+form#resume_preview p.submit {
+    display: flex !important;
+    gap: 1rem !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    margin-top: 2rem !important;
+    padding-top: 2rem !important;
+    border-top: 2px solid rgba(100, 116, 139, 0.2) !important;
+}
+
+/* Submit button in preview - PRIMARY CTA */
+#resume_preview input[type="submit"],
+form#resume_preview input[type="submit"],
+#resume_preview button[type="submit"],
+form#resume_preview button[type="submit"],
+#resume_preview .job-manager-form-actions input[type="submit"],
+form#resume_preview .job-manager-form-actions input[type="submit"],
+#resume_preview p.submit input[type="submit"],
+form#resume_preview p.submit input[type="submit"] {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%) !important;
+    color: #ffffff !important;
+    padding: 1rem 2.5rem !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4) !important;
+}
+
+#resume_preview input[type="submit"]:hover,
+form#resume_preview input[type="submit"]:hover,
+#resume_preview button[type="submit"]:hover,
+form#resume_preview button[type="submit"]:hover,
+#resume_preview .job-manager-form-actions input[type="submit"]:hover,
+form#resume_preview .job-manager-form-actions input[type="submit"]:hover,
+#resume_preview p.submit input[type="submit"]:hover,
+form#resume_preview p.submit input[type="submit"]:hover {
+    background: linear-gradient(135deg, #0891b2 0%, #2563eb 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6) !important;
+}
+
+/* Edit/Back button in preview - Secondary style */
+#resume_preview .button,
+form#resume_preview .button,
+#resume_preview a.button,
+form#resume_preview a.button,
+#resume_preview input.button,
+form#resume_preview input.button,
+#resume_preview .job-manager-form-actions .button,
+form#resume_preview .job-manager-form-actions .button,
+#resume_preview p.submit a,
+form#resume_preview p.submit a {
+    background: rgba(30, 41, 59, 0.5) !important;
+    border: 1px solid rgba(100, 116, 139, 0.4) !important;
+    color: var(--color-text-secondary) !important;
+    padding: 1rem 2rem !important;
+    border-radius: 8px !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    box-shadow: none !important;
+}
+
+#resume_preview .button:hover,
+form#resume_preview .button:hover,
+#resume_preview a.button:hover,
+form#resume_preview a.button:hover,
+#resume_preview input.button:hover,
+form#resume_preview input.button:hover,
+#resume_preview .job-manager-form-actions .button:hover,
+form#resume_preview .job-manager-form-actions .button:hover,
+#resume_preview p.submit a:hover,
+form#resume_preview p.submit a:hover {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(100, 116, 139, 0.6) !important;
+    color: var(--color-text-primary) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Force any non-submit buttons to use secondary style */
+#resume_preview input[type="button"],
+form#resume_preview input[type="button"],
+#resume_preview button:not([type="submit"]),
+form#resume_preview button:not([type="submit"]) {
+    background: rgba(30, 41, 59, 0.5) !important;
+    border: 1px solid rgba(100, 116, 139, 0.4) !important;
+    color: var(--color-text-secondary) !important;
+    box-shadow: none !important;
+}
+
+#resume_preview input[type="button"]:hover,
+form#resume_preview input[type="button"]:hover,
+#resume_preview button:not([type="submit"]):hover,
+form#resume_preview button:not([type="submit"]):hover {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(100, 116, 139, 0.6) !important;
+    color: var(--color-text-primary) !important;
+}
+
+/* Error messages in preview */
+#resume_preview .job-manager-error,
+form#resume_preview .job-manager-error {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    color: #fca5a5 !important;
+}
+
+/* Success messages */
+#resume_preview .job-manager-message,
+form#resume_preview .job-manager-message {
+    background: rgba(34, 197, 94, 0.1) !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    color: #86efac !important;
+}
+
+/* File preview links */
+#resume_preview .resume-file,
+form#resume_preview .resume-file {
+    background: rgba(6, 182, 212, 0.1) !important;
+    border: 1px solid rgba(6, 182, 212, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 0.75rem 1rem !important;
+    display: inline-block !important;
+    margin-top: 0.5rem !important;
+}
+
+#resume_preview .resume-file a,
+form#resume_preview .resume-file a {
+    color: var(--color-cyan) !important;
+    font-weight: 500 !important;
+}
+
+/* Mobile responsive for preview */
+@media (max-width: 768px) {
+    #resume_preview dl,
+    form#resume_preview dl {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+    }
+    
+    #resume_preview dt,
+    form#resume_preview dt {
+        padding-bottom: 0.25rem !important;
+    }
+    
+    #resume_preview,
+    form#resume_preview {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    #resume_preview .job-manager-form-actions,
+    form#resume_preview .job-manager-form-actions,
+    #resume_preview p.submit,
+    form#resume_preview p.submit {
+        flex-direction: column !important;
+    }
+    
+    #resume_preview input[type="submit"],
+    form#resume_preview input[type="submit"],
+    #resume_preview .button,
+    form#resume_preview .button {
+        width: 100% !important;
+        text-align: center !important;
+    }
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 767px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1.125rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .service-card {
+        flex-direction: column;
+    }
+    
+    .service-features {
+        grid-template-columns: 1fr;
+    }
+}
+

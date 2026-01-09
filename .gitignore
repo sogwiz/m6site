@@ -1,0 +1,19 @@
+# Dependencies
+/node_modules
+/package-lock.json
+
+# Production builds and temporary files
+/build
+/dist
+/out
+.env
+.DS_Store
+*.log
+
+# Cursor AI specific ignores
+.cursorignore
+.cursorindexingignore
+.cursorrules
+
+# Next.js (if applicable)
+.next/

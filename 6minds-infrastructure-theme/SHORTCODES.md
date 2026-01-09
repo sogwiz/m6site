@@ -1,0 +1,114 @@
+# How to Use Hero and Services Sections on Any Page
+
+There are **three ways** to add the hero and services sections to any page in WordPress:
+
+## Method 1: Using Shortcodes (Easiest - Recommended)
+
+### In the WordPress Editor:
+
+1. **Edit any page or post** in WordPress
+2. **Add a Shortcode block** (or type directly in Classic Editor)
+3. **Use these shortcodes:**
+
+   **For Hero Section:**
+   ```
+   [hero_section]
+   ```
+   or
+   ```
+   [hero]
+   ```
+
+   **For Services Section:**
+   ```
+   [services_section]
+   ```
+   or
+   ```
+   [services]
+   ```
+
+### Example:
+```
+[hero_section]
+
+Your page content here...
+
+[services_section]
+```
+
+### Where to add shortcodes:
+- **Block Editor (Gutenberg)**: Add a "Shortcode" block and paste the shortcode
+- **Classic Editor**: Just type the shortcode directly in the content area
+- **Widgets**: Can be used in text widgets
+- **Anywhere shortcodes are supported**
+
+---
+
+## Method 2: Using Page Templates
+
+### For Hero Section:
+
+1. **Edit the page** in WordPress
+2. In the **Page Attributes** box (right sidebar), find **Template**
+3. Select **"Page with Hero Section"**
+4. The hero section will automatically appear above your page content
+
+**Note:** This template only includes the hero section. To add services, use the shortcode method.
+
+---
+
+## Method 3: Direct Template Editing (Advanced)
+
+If you want to add these sections to specific template files:
+
+### In any template file (like `page.php`, `single.php`, etc.):
+
+Add this code where you want the hero section:
+```php
+<?php get_template_part('template-parts/hero-section'); ?>
+```
+
+Add this code where you want the services section:
+```php
+<?php get_template_part('template-parts/services-section'); ?>
+```
+
+### Example in `page.php`:
+```php
+<?php
+get_header();
+?>
+
+<main class="main-content">
+    <?php get_template_part('template-parts/hero-section'); ?>
+    
+    <div class="container">
+        <?php the_content(); ?>
+    </div>
+    
+    <?php get_template_part('template-parts/services-section'); ?>
+</main>
+
+<?php get_footer(); ?>
+```
+
+---
+
+## Quick Reference
+
+| Method | Best For | Difficulty |
+|--------|----------|------------|
+| **Shortcodes** | Adding to specific pages/posts | ⭐ Easy |
+| **Page Templates** | Pages that need hero section | ⭐ Easy |
+| **Template Editing** | Site-wide changes | ⭐⭐⭐ Advanced |
+
+---
+
+## Tips
+
+- **Shortcodes work everywhere**: Pages, posts, widgets, even in theme files using `do_shortcode('[hero_section]')`
+- **Combine sections**: You can use both `[hero_section]` and `[services_section]` on the same page
+- **Customize order**: Place shortcodes anywhere in your content to control where sections appear
+- **Multiple times**: You can use the same shortcode multiple times on a page if needed
+
