@@ -50,6 +50,11 @@ get_header();
             endif;
             ?>
         </div>
+        
+        <?php
+        // Display job categories browser
+        echo do_shortcode('[job_categories_browser]');
+        ?>
     </div>
 </main>
 

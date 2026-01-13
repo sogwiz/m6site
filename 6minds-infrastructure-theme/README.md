@@ -122,6 +122,7 @@ Edit the CSS variables in `/assets/css/main.css`:
 - [Parent Project README](../README.md) - React site documentation
 - [SHORTCODES.md](SHORTCODES.md) - WordPress shortcodes
 - [JOB-SEARCH-SETUP.md](JOB-SEARCH-SETUP.md) - Job search configuration
+- [JOB-CATEGORIES-GUIDE.md](JOB-CATEGORIES-GUIDE.md) - Job categories and view toggle guide
 
 ## File Structure
 

@@ -48,6 +48,17 @@ get_header();
                                     echo '<span class="job-type">' . esc_html($job_type) . '</span>';
                                 }
                             }
+                            
+                            // Get job categories
+                            $job_categories = wp_get_post_terms(get_the_ID(), 'job_listing_category');
+                            if (!empty($job_categories) && !is_wp_error($job_categories)) {
+                                foreach ($job_categories as $category) {
+                                    $category_link = get_term_link($category);
+                                    if (!is_wp_error($category_link)) {
+                                        echo '<a href="' . esc_url($category_link) . '" class="job-category">' . esc_html($category->name) . '</a>';
+                                    }
+                                }
+                            }
                             ?>
                             <?php if (get_post_meta(get_the_ID(), '_application_deadline', true)) : ?>
                                 <span class="job-deadline">
@@ -120,6 +131,21 @@ get_header();
                                     if ($job_type) {
                                         echo '<li><strong>Type:</strong><span>' . esc_html($job_type) . '</span></li>';
                                     }
+                                }
+                                
+                                // Get job categories
+                                $job_categories = wp_get_post_terms(get_the_ID(), 'job_listing_category');
+                                if (!empty($job_categories) && !is_wp_error($job_categories)) {
+                                    echo '<li><strong>Category:</strong><span>';
+                                    $category_links = array();
+                                    foreach ($job_categories as $category) {
+                                        $category_link = get_term_link($category);
+                                        if (!is_wp_error($category_link)) {
+                                            $category_links[] = '<a href="' . esc_url($category_link) . '">' . esc_html($category->name) . '</a>';
+                                        }
+                                    }
+                                    echo implode(', ', $category_links);
+                                    echo '</span></li>';
                                 }
                                 ?>
                                 <?php if (get_post_meta(get_the_ID(), '_job_salary', true)) : ?>

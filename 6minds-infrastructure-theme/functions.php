@@ -285,3 +285,65 @@ function sixminds_jobs_search_page_callback() {
     echo '<p class="description">' . __('Select the page that contains the [jobs] shortcode for search results.', '6minds-infrastructure') . '</p>';
 }
 
+/**
+ * Shortcode to display job categories browser
+ * Usage: [job_categories_browser]
+ */
+function sixminds_job_categories_browser_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'title' => 'Browse by Category',
+        'show_count' => 'yes',
+        'orderby' => 'name',
+        'order' => 'ASC'
+    ), $atts);
+    
+    // Get all job listing categories
+    $categories = get_terms(array(
+        'taxonomy' => 'job_listing_category',
+        'hide_empty' => true,
+        'orderby' => $atts['orderby'],
+        'order' => $atts['order']
+    ));
+    
+    if (empty($categories) || is_wp_error($categories)) {
+        return '';
+    }
+    
+    ob_start();
+    ?>
+    <div class="job-categories-browser">
+        <h2 class="job-categories-title"><?php echo esc_html($atts['title']); ?></h2>
+        <div class="job-categories-grid">
+            <?php foreach ($categories as $category) : 
+                $category_link = get_term_link($category);
+                if (is_wp_error($category_link)) {
+                    continue;
+                }
+                ?>
+                <a href="<?php echo esc_url($category_link); ?>" class="job-category-card">
+                    <div class="job-category-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 7h-9"></path>
+                            <path d="M14 17H5"></path>
+                            <circle cx="17" cy="17" r="3"></circle>
+                            <circle cx="7" cy="7" r="3"></circle>
+                        </svg>
+                    </div>
+                    <h3 class="job-category-name"><?php echo esc_html($category->name); ?></h3>
+                    <?php if ($atts['show_count'] === 'yes') : ?>
+                        <span class="job-category-count"><?php echo esc_html($category->count); ?> <?php echo _n('job', 'jobs', $category->count, '6minds-infrastructure'); ?></span>
+                    <?php endif; ?>
+                    <span class="job-category-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('job_categories_browser', 'sixminds_job_categories_browser_shortcode');
+add_shortcode('browse_job_categories', 'sixminds_job_categories_browser_shortcode');

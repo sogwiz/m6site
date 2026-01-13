@@ -28,6 +28,15 @@ There are **three ways** to add the hero and services sections to any page in Wo
    [services]
    ```
 
+   **For Job Categories Browser:**
+   ```
+   [job_categories_browser]
+   ```
+   or
+   ```
+   [browse_job_categories]
+   ```
+
 ### Example:
 ```
 [hero_section]
@@ -35,6 +44,8 @@ There are **three ways** to add the hero and services sections to any page in Wo
 Your page content here...
 
 [services_section]
+
+[job_categories_browser]
 ```
 
 ### Where to add shortcodes:
@@ -105,10 +116,45 @@ get_header();
 
 ---
 
+## Job Categories Browser Options
+
+The job categories browser shortcode supports several parameters:
+
+```
+[job_categories_browser title="Browse by Category" show_count="yes" orderby="name" order="ASC"]
+```
+
+### Parameters:
+- **title**: Widget heading (default: "Browse by Category")
+- **show_count**: Display job counts (default: "yes", options: "yes" or "no")
+- **orderby**: Sort method (default: "name", options: "name", "count", "id")
+- **order**: Sort order (default: "ASC", options: "ASC" or "DESC")
+
+### Examples:
+
+**Sort by most jobs:**
+```
+[job_categories_browser orderby="count" order="DESC"]
+```
+
+**Hide job counts:**
+```
+[job_categories_browser show_count="no"]
+```
+
+**Custom title:**
+```
+[job_categories_browser title="Find Jobs by Specialty"]
+```
+
+---
+
 ## Tips
 
 - **Shortcodes work everywhere**: Pages, posts, widgets, even in theme files using `do_shortcode('[hero_section]')`
 - **Combine sections**: You can use both `[hero_section]` and `[services_section]` on the same page
 - **Customize order**: Place shortcodes anywhere in your content to control where sections appear
 - **Multiple times**: You can use the same shortcode multiple times on a page if needed
+- **Job categories**: The categories browser is automatically added to job listings pages
+- **For detailed job categories info**: See [JOB-CATEGORIES-GUIDE.md](JOB-CATEGORIES-GUIDE.md)
 

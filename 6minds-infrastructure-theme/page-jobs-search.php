@@ -38,6 +38,11 @@ $search_keywords = isset($_GET['search_keywords']) ? sanitize_text_field($_GET['
             endwhile;
             ?>
         </article>
+        
+        <?php
+        // Display job categories browser
+        echo do_shortcode('[job_categories_browser]');
+        ?>
     </div>
 </main>
 

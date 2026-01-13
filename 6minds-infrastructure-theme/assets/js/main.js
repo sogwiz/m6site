@@ -279,3 +279,206 @@
 
 })();
 
+
+/**
+ * Job Listings View Toggle (List vs Grid)
+ */
+(function() {
+    'use strict';
+    
+    function initViewToggle() {
+        // Check if toggle already exists
+        if (document.querySelector('.job-view-toggle')) {
+            console.log('[6MINDS] View toggle already exists');
+            return;
+        }
+        
+        // Try multiple selectors for WP Job Manager containers
+        const jobListingsUl = document.querySelector('ul.job_listings');
+        const jobManagerDiv = document.querySelector('div.job_listings');
+        const jobListingsWrapper = document.querySelector('.job-listings-wrapper');
+        
+        console.log('[6MINDS] Job listings containers:', {
+            ul: !!jobListingsUl,
+            div: !!jobManagerDiv,
+            wrapper: !!jobListingsWrapper
+        });
+        
+        if (!jobListingsUl && !jobManagerDiv && !jobListingsWrapper) {
+            console.log('[6MINDS] No job listings container found for view toggle');
+            return;
+        }
+        
+        // Create view toggle buttons
+        const viewToggle = document.createElement('div');
+        viewToggle.className = 'job-view-toggle';
+        viewToggle.innerHTML = `
+            <button class="view-toggle-btn active" data-view="grid" title="Grid View">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List View">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        `;
+        
+        // Try to find the "Add alert" / "RSS" container (WP Job Manager footer)
+        let insertTarget = null;
+        let insertMethod = 'before';
+        
+        // Look for showing_jobs container (typically has Add alert, RSS links)
+        const showingJobs = document.querySelector('.showing_jobs');
+        console.log('[6MINDS] Found showing_jobs:', !!showingJobs);
+        
+        if (showingJobs) {
+            // Create a wrapper for both showing_jobs content and view toggle
+            const existingLinks = showingJobs.querySelector('.showing_jobs-links, a[href*="alert"], a[href*="rss"]');
+            if (existingLinks && existingLinks.parentElement) {
+                existingLinks.parentElement.insertBefore(viewToggle, existingLinks);
+                insertTarget = 'showing_jobs_before_links';
+            } else {
+                showingJobs.insertBefore(viewToggle, showingJobs.firstChild);
+                insertTarget = 'showing_jobs_first_child';
+            }
+            console.log('[6MINDS] Inserted toggle in showing_jobs:', insertTarget);
+        }
+        
+        // Fallback: Look for job-manager-pagination
+        if (!insertTarget) {
+            const pagination = document.querySelector('.job-manager-pagination');
+            if (pagination && pagination.parentElement) {
+                pagination.parentElement.insertBefore(viewToggle, pagination);
+                insertTarget = 'found';
+            }
+        }
+        
+        // Fallback: Insert before the job listings <ul>
+        if (!insertTarget && jobListingsUl && jobListingsUl.parentElement) {
+            jobListingsUl.parentElement.insertBefore(viewToggle, jobListingsUl);
+            insertTarget = 'found';
+        }
+        
+        // Last resort: Insert at top of main container
+        if (!insertTarget && jobManagerDiv) {
+            jobManagerDiv.insertBefore(viewToggle, jobManagerDiv.firstChild);
+            insertTarget = 'found';
+        }
+        
+        if (!insertTarget) {
+            console.log('[6MINDS] ERROR: Could not find suitable location for view toggle');
+            return;
+        }
+        
+        console.log('[6MINDS] View toggle successfully inserted at:', insertTarget);
+        
+        // Get toggle buttons first (before using them)
+        const toggleButtons = viewToggle.querySelectorAll('.view-toggle-btn');
+        
+        // Define setView function
+        function setView(view) {
+            // Target the <ul> element that contains job listings
+            const listingsUl = document.querySelector('ul.job_listings');
+            const listingsWrapper = listingsUl || document.querySelector('.job-listings-wrapper');
+            if (!listingsWrapper) return;
+            
+            // Update button states
+            toggleButtons.forEach(btn => {
+                if (btn.dataset.view === view) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Update view class
+            if (view === 'list') {
+                listingsWrapper.classList.add('list-view');
+                listingsWrapper.classList.remove('grid-view');
+            } else {
+                listingsWrapper.classList.add('grid-view');
+                listingsWrapper.classList.remove('list-view');
+            }
+        }
+        
+        // Get saved view preference and apply it (default to list view)
+        const savedView = localStorage.getItem('jobListingsView') || 'list';
+        setView(savedView);
+        
+        // Handle view toggle clicks
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.dataset.view;
+                setView(view);
+                localStorage.setItem('jobListingsView', view);
+            });
+        });
+    }
+    
+    // Initialize on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[6MINDS] DOM loaded, initializing view toggle');
+            initViewToggle();
+        });
+    } else {
+        console.log('[6MINDS] DOM already loaded, initializing view toggle immediately');
+        initViewToggle();
+    }
+    
+    // Re-initialize after AJAX (WP Job Manager uses AJAX for filtering)
+    if (typeof jQuery !== 'undefined') {
+        console.log('[6MINDS] jQuery detected, adding AJAX listeners');
+        
+        // Listen for various WP Job Manager events
+        jQuery(document).on('updated_results', function() {
+            console.log('[6MINDS] WP Job Manager updated_results event fired');
+            setTimeout(initViewToggle, 100);
+        });
+        
+        // Also listen for when job listings are loaded
+        jQuery(document).ajaxComplete(function(event, xhr, settings) {
+            if (settings.url && settings.url.indexOf('get_listings') !== -1) {
+                console.log('[6MINDS] Job listings AJAX completed');
+                setTimeout(initViewToggle, 200);
+            }
+        });
+        
+        // Watch for DOM changes to showing_jobs area
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length || mutation.removedNodes.length) {
+                    const hasShowingJobs = document.querySelector('.showing_jobs');
+                    const hasToggle = document.querySelector('.job-view-toggle');
+                    if (hasShowingJobs && !hasToggle) {
+                        console.log('[6MINDS] Detected DOM change, re-initializing toggle');
+                        setTimeout(initViewToggle, 50);
+                    }
+                }
+            });
+        });
+        
+        // Start observing after a short delay to let page load
+        setTimeout(function() {
+            const targetNode = document.querySelector('div.job_listings, .job-listings-wrapper');
+            if (targetNode) {
+                observer.observe(targetNode, { 
+                    childList: true, 
+                    subtree: true 
+                });
+                console.log('[6MINDS] MutationObserver started watching for DOM changes');
+            }
+        }, 500);
+    }
+})();
+

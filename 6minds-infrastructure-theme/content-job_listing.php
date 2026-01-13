@@ -55,6 +55,17 @@ if (!defined('ABSPATH')) {
                 echo '<span class="job_listing-type">' . esc_html($job_type) . '</span>';
             }
         }
+        
+        // Get job categories (WPJobManager uses 'job_listing_category' taxonomy)
+        $job_categories = wp_get_post_terms(get_the_ID(), 'job_listing_category');
+        if (!empty($job_categories) && !is_wp_error($job_categories)) {
+            foreach ($job_categories as $category) {
+                $category_link = get_term_link($category);
+                if (!is_wp_error($category_link)) {
+                    echo '<a href="' . esc_url($category_link) . '" class="job_listing-category">' . esc_html($category->name) . '</a>';
+                }
+            }
+        }
         ?>
         <a href="<?php the_permalink(); ?>" class="job_listing-link">View Details</a>
     </div>
